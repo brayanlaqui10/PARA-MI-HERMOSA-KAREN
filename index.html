@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Para Ti, Mi Karen 🌻✨</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #020208;
+            --gold: #ffd700;
+            --gold-soft: #ffe98a;
+            --amber: #ff8c00;
+        }
+
+        html, body {
+            background-color: var(--bg);
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        #introScreen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 200;
+            background: radial-gradient(ellipse at center, #0a0a14 0%, #020208 75%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            transition: opacity 1.2s ease, visibility 1.2s ease;
+        }
+
+        #introScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .bouquet-container {
+            width: 260px;
+            height: 320px;
+            margin-bottom: 10px;
+            animation: growAndSway 3.5s ease-in-out infinite alternate;
+            transform-origin: bottom center;
+            filter: drop-shadow(0 0 25px rgba(255, 200, 0, 0.45));
+        }
+
+        @keyframes growAndSway {
+            0% { transform: scale(0.7) rotate(-4deg); }
+            50% { transform: scale(1.05) rotate(4deg); }
+            100% { transform: scale(1.0) rotate(-2deg); }
+        }
+
+        .intro-title {
+            color: var(--gold);
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        .intro-subtitle {
+            color: #e2e8f0;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, var(--gold), var(--amber));
+            border: none;
+            color: #1a1200;
+            padding: 15px 42px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 45px rgba(255, 215, 0, 1);
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+        }
+
+        .header-title {
+            position: fixed;
+            top: calc(18px + env(safe-area-inset-top, 0px));
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            text-align: center;
+            pointer-events: none;
+            width: 90%;
+        }
+
+        .header-title h1 {
+            color: var(--gold);
+            font-size: 2.1rem;
+            font-weight: 900;
+            text-shadow: 0 0 20px var(--gold), 0 0 35px var(--amber);
+            letter-spacing: 2px;
+        }
+
+        .header-title p {
+            color: #fff8d0;
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        .music-btn {
+            position: fixed;
+            top: calc(18px + env(safe-area-inset-top, 0px));
+            right: 18px;
+            z-index: 15;
+            background: rgba(15, 12, 5, 0.85);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 9px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .bottom-cards-bar {
+            position: fixed;
+            bottom: calc(15px + env(safe-area-inset-bottom, 0px));
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            gap: 10px;
+            background: rgba(10, 8, 4, 0.82);
+            padding: 8px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            max-width: 95%;
+            overflow-x: auto;
+        }
+
+        .quick-card-btn {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.2));
+            border: 1px solid var(--gold);
+            color: #fff8d0;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+
+        .quick-card-btn:hover {
+            background: linear-gradient(135deg, var(--gold), var(--amber));
+            color: #000;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(8px);
+            z-index: 300;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .note-card {
+            background: rgba(22, 18, 8, 0.95);
+            border: 2px solid var(--gold);
+            border-radius: 22px;
+            padding: 30px 25px;
+            max-width: 520px;
+            text-align: center;
+            box-shadow: 0 0 45px rgba(255, 215, 0, 0.7);
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .note-card { transform: translateY(0); }
+
+        .note-card h2 {
+            color: var(--gold);
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+        }
+
+        .note-card p {
+            color: #fff8e7;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 22px;
+            text-align: justify;
+        }
+
+        .close-btn {
+            background: linear-gradient(135deg, var(--gold), var(--amber));
+            color: #1a1200;
+            border: none;
+            padding: 10px 28px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=sweet-love-111663.mp3"></audio>
+
+    <button class="music-btn" onclick="toggleMusic()">🎵 Música: ON</button>
+
+    <div id="introScreen">
+        <div class="bouquet-container">
+            <svg viewBox="0 0 200 260" width="100%" height="100%">
+                <defs>
+                    <radialGradient id="petalGradIntro" cx="35%" cy="30%" r="75%">
+                        <stop offset="0%" stop-color="#fff6c8"/>
+                        <stop offset="55%" stop-color="#ffd400"/>
+                        <stop offset="100%" stop-color="#e88a00"/>
+                    </radialGradient>
+                    <radialGradient id="centerGradIntro" cx="40%" cy="35%" r="70%">
+                        <stop offset="0%" stop-color="#7a4a1e"/>
+                        <stop offset="100%" stop-color="#3b2410"/>
+                    </radialGradient>
+                    <linearGradient id="stemGradIntro" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#4fbf5a"/>
+                        <stop offset="100%" stop-color="#1e7a34"/>
+                    </linearGradient>
+                </defs>
+
+                <path d="M50 140 L100 240 L150 140 L170 80 L30 80 Z" fill="#d2b48c" stroke="#8b5a2b" stroke-width="3"/>
+                <path d="M100 240 L85 140 L100 80 L115 140 Z" fill="#c5a059" opacity="0.5"/>
+                <path d="M80 150 C70 140 70 165 100 155 C130 165 130 140 120 150 C110 160 90 160 80 150 Z" fill="#ff6b81"/>
+
+                <path d="M60 90 L100 160 M80 85 L100 160 M100 70 L100 160 M120 85 L100 160 M140 90 L100 160" stroke="url(#stemGradIntro)" stroke-width="5" stroke-linecap="round"/>
+
+                <g id="sunflowerGroupIntro"></g>
+            </svg>
+        </div>
+        <h1 class="intro-title">Para ti, mi Karen ✨</h1>
+        <p class="intro-subtitle">De parte de Brayan</p>
+        <button class="start-btn" onclick="iniciarExperiencia()">Toca para iniciar 💛</button>
+    </div>
+
+    <div class="header-title">
+        <h1>TE AMO DEMASIADO, KAREN 💛</h1>
+        <p>Gira el universo 3D o toca los accesos directos abajo ✉️</p>
+    </div>
+
+    <div class="bottom-cards-bar">
+        <button class="quick-card-btn" onclick="openModal(1)">📜 Carta 1: Más de un año juntos</button>
+        <button class="quick-card-btn" onclick="openModal(2)">✨ Carta 2: Lo mucho que te amo</button>
+        <button class="quick-card-btn" onclick="openModal(3)">💌 Carta 3: Mis disculpas sinceras</button>
+    </div>
+
+    <div class="modal-overlay" id="modal1">
+        <div class="note-card">
+            <h2>📜 1. Más de un año de amor...</h2>
+            <p>Ya llevamos más de un año caminando juntos, y cada día a tu lado reafirma lo afortunado que soy. Hemos construido momentos hermosos y recuerdos que guardo en lo más profundo de mi corazón. Eres mi compañera, mi felicidad y mi lugar seguro. ✨</p>
+            <button class="close-btn" onclick="closeModal(1)">Cerrar Carta 💛</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal2">
+        <div class="note-card">
+            <h2>✨ 2. Lo mucho que te amo...</h2>
+            <p>Quiero que nunca dudes de lo profundamente que te amo. Eres la persona más especial de mi vida, mi amor verdadero y con quien deseo seguir compartiendo cada uno de mis días. Nada de lo que pase afuera puede cambiar lo que siento por ti. 🌻</p>
+            <button class="close-btn" onclick="closeModal(2)">Cerrar Carta 💛</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal3">
+        <div class="note-card">
+            <h2>💌 3. Mis disculpas de corazón, Karen...</h2>
+            <p>Te pido disculpas de todo corazón por el mal momento que pasaste con ese mensaje inapropiado de mis compañeros. Me dolió mucho que pasara esa incomodidad, pero te prometo que mi compromiso y mi amor por ti son reales y firmes. No quiero que nada de esto impida que sigamos juntos. Eres todo para mí. 💛✨</p>
+            <button class="close-btn" onclick="closeModal(3)">Cerrar Carta 💛</button>
+        </div>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const svgNS = "http://www.w3.org/2000/svg";
+            const group = document.getElementById('sunflowerGroupIntro');
+            if (group) {
+                const centers = [
+                    { x: 60, y: 70, r: 20 }, { x: 85, y: 48, r: 23 },
+                    { x: 100, y: 32, r: 25 }, { x: 116, y: 48, r: 23 },
+                    { x: 140, y: 70, r: 20 }
+                ];
+                centers.forEach(c => {
+                    const petals = 14;
+                    for (let i = 0; i < petals; i++) {
+                        const angle = (i / petals) * Math.PI * 2;
+                        const petal = document.createElementNS(svgNS, "ellipse");
+                        petal.setAttribute("cx", c.x + Math.cos(angle) * c.r * 0.72);
+                        petal.setAttribute("cy", c.y + Math.sin(angle) * c.r * 0.72);
+                        petal.setAttribute("rx", c.r * 0.5);
+                        petal.setAttribute("ry", c.r * 0.22);
+                        petal.setAttribute("fill", "url(#petalGradIntro)");
+                        petal.setAttribute("stroke", "#e07d00");
+                        petal.setAttribute("stroke-width", "0.6");
+                        petal.setAttribute("transform", `rotate(${angle * 180 / Math.PI} ${c.x + Math.cos(angle) * c.r * 0.72} ${c.y + Math.sin(angle) * c.r * 0.72})`);
+                        group.appendChild(petal);
+                    }
+                    const center = document.createElementNS(svgNS, "circle");
+                    center.setAttribute("cx", c.x);
+                    center.setAttribute("cy", c.y);
+                    center.setAttribute("r", c.r * 0.42);
+                    center.setAttribute("fill", "url(#centerGradIntro)");
+                    group.appendChild(center);
+                });
+            }
+        });
+
+        const mensajesFrases = [
+            "FLORES AMARILLAS PARA TI 🌻",
+            "TE AMO KAREN 💛",
+            "MÁS DE UN AÑO JUNTOS ✨",
+            "DE PARTE DE BRAYAN 💛",
+            "ERES MI PERSONA FAVORITA 🌟",
+            "TU AMOR ES MI LUZ",
+            "UN RAMO ESPECIAL PARA TI 💐",
+            "SIEMPRE JUNTOS 🌻",
+            "GRACIAS POR EXISTIR 💛"
+        ];
+
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x020208, 0.0035);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 24, 44);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.8;
+
+        const centerGroup = new THREE.Group();
+
+        // Corazón Parado
+        const heartShape = new THREE.Shape();
+        heartShape.moveTo(0, 2.2);
+        heartShape.bezierCurveTo(0, 3.8, 2.2, 5.0, 3.8, 3.0);
+        heartShape.bezierCurveTo(5.2, 1.2, 3.5, -1.2, 0, -4.2);
+        heartShape.bezierCurveTo(-3.5, -1.2, -5.2, 1.2, -3.8, 3.0);
+        heartShape.bezierCurveTo(-2.2, 5.0, 0, 3.8, 0, 2.2);
+
+        const extrudeSettings = { depth: 0.8, bevelEnabled: true, bevelSegments: 4, steps: 2, bevelSize: 0.3, bevelThickness: 0.3 };
+        const heartGeo = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+        heartGeo.computeVertexNormals();
+
+        const heartMat = new THREE.MeshPhongMaterial({ color: 0xffcc00, emissive: 0xff9d00, emissiveIntensity: 0.6, shininess: 80, specular: 0xffffff });
+        const heartMesh = new THREE.Mesh(heartGeo, heartMat);
+        heartMesh.scale.set(1.2, 1.2, 1.2);
+        centerGroup.add(heartMesh);
+
+        const glowLayers = [];
+        [1.45, 1.32, 1.20].forEach((scale, idx) => {
+            const glowMat = new THREE.MeshBasicMaterial({
+                color: 0xffd700,
+                transparent: true,
+                opacity: 0.12 - idx * 0.02,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                side: THREE.BackSide
+            });
+            const glowMesh = new THREE.Mesh(heartGeo, glowMat);
+            glowMesh.scale.set(scale, scale, scale);
+            centerGroup.add(glowMesh);
+            glowLayers.push(glowMesh);
+        });
+
+        const heartLight = new THREE.PointLight(0xffcc55, 2.5, 60, 2);
+        heartLight.position.set(0, 0, 2);
+        centerGroup.add(heartLight);
+        scene.add(new THREE.AmbientLight(0x3a2c10, 1.2));
+
+        function createRingTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512; canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createRadialGradient(256, 256, 90, 256, 256, 256);
+            grad.addColorStop(0, 'rgba(255,220,120,0)');
+            grad.addColorStop(0.45, 'rgba(255,196,0,0.55)');
+            grad.addColorStop(0.75, 'rgba(255,140,0,0.35)');
+            grad.addColorStop(1, 'rgba(255,140,0,0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 512, 512);
+            return new THREE.CanvasTexture(canvas);
+        }
+        const ringGeo = new THREE.RingGeometry(4.5, 11.5, 96);
+        const ringMat = new THREE.MeshBasicMaterial({
+            map: createRingTexture(),
+            side: THREE.DoubleSide,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+        });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.rotation.x = Math.PI / 2;
+        centerGroup.add(ring);
+
+        scene.add(centerGroup);
+
+        function createTextSprite(text, isSpecial = false) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 600;
+            canvas.height = 140;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (isSpecial) {
+                ctx.fillStyle = 'rgba(255, 215, 0, 0.25)';
+                ctx.strokeStyle = '#ffd700';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.roundRect(20, 20, 560, 100, 20);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.shadowColor = '#ffea00';
+                ctx.shadowBlur = 25;
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'Bold 32px "Segoe UI", Arial';
+            } else {
+                ctx.shadowColor = '#ffd700';
+                ctx.shadowBlur = 12;
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'Bold 22px "Segoe UI", Arial';
+            }
+
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true }));
+            sprite.scale.set(isSpecial ? 18 : 11, isSpecial ? 4.2 : 2.8, 1);
+            return sprite;
+        }
+
+        // --- RENDERIZADO HIPERREALISTA DE GIRASOLES ---
+        function paintSunflower(ctx, cx, cy, r, petalCount) {
+            for (let i = 0; i < petalCount; i++) {
+                const angle = (i / petalCount) * Math.PI * 2 + 0.12;
+                const px = cx + Math.cos(angle) * r * 0.65;
+                const py = cy + Math.sin(angle) * r * 0.65;
+
+                ctx.save();
+                ctx.translate(px, py);
+                ctx.rotate(angle);
+
+                const gradBack = ctx.createLinearGradient(-r * 0.5, 0, r * 0.5, 0);
+                gradBack.addColorStop(0, '#9c4d00');
+                gradBack.addColorStop(0.4, '#e68a00');
+                gradBack.addColorStop(0.85, '#ffcc00');
+                gradBack.addColorStop(1, '#ffe885');
+                ctx.fillStyle = gradBack;
+
+                ctx.beginPath();
+                ctx.moveTo(-r * 0.1, 0);
+                ctx.bezierCurveTo(-r * 0.1, -r * 0.18, r * 0.3, -r * 0.22, r * 0.55, 0);
+                ctx.bezierCurveTo(r * 0.3, r * 0.22, -r * 0.1, r * 0.18, -r * 0.1, 0);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            for (let i = 0; i < petalCount; i++) {
+                const angle = (i / petalCount) * Math.PI * 2;
+                const px = cx + Math.cos(angle) * r * 0.6;
+                const py = cy + Math.sin(angle) * r * 0.6;
+
+                ctx.save();
+                ctx.translate(px, py);
+                ctx.rotate(angle);
+
+                const gradFront = ctx.createLinearGradient(-r * 0.45, 0, r * 0.45, 0);
+                gradFront.addColorStop(0, '#cc6e00');
+                gradFront.addColorStop(0.3, '#ffb700');
+                gradFront.addColorStop(0.7, '#ffea00');
+                gradFront.addColorStop(1, '#ffffff');
+                ctx.fillStyle = gradFront;
+
+                ctx.beginPath();
+                ctx.moveTo(-r * 0.08, 0);
+                ctx.bezierCurveTo(-r * 0.08, -r * 0.15, r * 0.25, -r * 0.19, r * 0.5, 0);
+                ctx.bezierCurveTo(r * 0.25, r * 0.19, -r * 0.08, r * 0.15, -r * 0.08, 0);
+                ctx.fill();
+
+                ctx.strokeStyle = 'rgba(212, 113, 0, 0.35)';
+                ctx.lineWidth = 0.8;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(r * 0.38, 0);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            const centerR = r * 0.44;
+            const centerGrad = ctx.createRadialGradient(cx - centerR * 0.2, cy - centerR * 0.2, centerR * 0.05, cx, cy, centerR);
+            centerGrad.addColorStop(0, '#8c592b');
+            centerGrad.addColorStop(0.4, '#523113');
+            centerGrad.addColorStop(0.85, '#2b1706');
+            centerGrad.addColorStop(1, '#140a02');
+            ctx.fillStyle = centerGrad;
+            ctx.beginPath();
+            ctx.arc(cx, cy, centerR, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(255, 200, 80, 0.45)';
+            for (let j = 0; j < 28; j++) {
+                const seedAngle = Math.random() * Math.PI * 2;
+                const seedDist = Math.random() * centerR * 0.8;
+                ctx.beginPath();
+                ctx.arc(cx + Math.cos(seedAngle) * seedDist, cy + Math.sin(seedAngle) * seedDist, 0.9, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createSunflowerBouquetSprite(isCard = false) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 320;
+            canvas.height = 320;
+
+            const wrapGrad = ctx.createLinearGradient(60, 120, 260, 300);
+            wrapGrad.addColorStop(0, '#f2d6b3');
+            wrapGrad.addColorStop(0.5, '#d4ad7b');
+            wrapGrad.addColorStop(1, '#946f40');
+            ctx.fillStyle = wrapGrad;
+            ctx.beginPath();
+            ctx.moveTo(100, 190);
+            ctx.lineTo(160, 300);
+            ctx.lineTo(220, 190);
+            ctx.lineTo(265, 115);
+            ctx.lineTo(55, 115);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(0,0,0,0.15)';
+            ctx.beginPath();
+            ctx.moveTo(160, 300);
+            ctx.lineTo(160, 115);
+            ctx.lineTo(220, 190);
+            ctx.closePath();
+            ctx.fill();
+
+            const flowerSpots = isCard
+                ? [{ x: 160, y: 60, r: 62 }]
+                : [{ x: 105, y: 95, r: 42 }, { x: 155, y: 55, r: 50 }, { x: 205, y: 95, r: 42 }, { x: 160, y: 135, r: 38 }];
+
+            flowerSpots.forEach(s => paintSunflower(ctx, s.x, s.y, s.r, 16));
+
+            if (isCard) {
+                ctx.save();
+                ctx.translate(230, 40);
+                ctx.rotate(-0.15);
+                ctx.fillStyle = '#fff3c4';
+                ctx.strokeStyle = '#ffd700';
+                ctx.lineWidth = 3;
+                ctx.shadowColor = '#ffea00';
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.rect(-30, -20, 60, 40);
+                ctx.fill();
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(-30, -20);
+                ctx.lineTo(0, 5);
+                ctx.lineTo(30, -20);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true }));
+            sprite.scale.set(isCard ? 7.8 : 5.2, isCard ? 7.8 : 5.2, 1);
+            return sprite;
+        }
+
+        const galaxyGroup = new THREE.Group();
+        const clickableObjects = [];
+
+        // Cartas orbitando
+        const cartasConfig = [
+            { id: 1, text: "✉️ CARTA 1: MÁS DE UN AÑO JUNTOS (TOCA AQUÍ)", angle: 0.6, radius: 15 },
+            { id: 2, text: "✉️ CARTA 2: LO MUCHO QUE TE AMO (TOCA AQUÍ)", angle: 2.7, radius: 19 },
+            { id: 3, text: "✉️ CARTA 3: MIS DISCULPAS SINCERAS (TOCA AQUÍ)", angle: 4.9, radius: 23 }
+        ];
+
+        cartasConfig.forEach(c => {
+            const group = new THREE.Group();
+            group.position.x = Math.cos(c.angle) * c.radius;
+            group.position.z = Math.sin(c.angle) * c.radius;
+            group.position.y = 2.5;
+
+            const textObj = createTextSprite(c.text, true);
+            group.add(textObj);
+
+            const bouquet = createSunflowerBouquetSprite(true);
+            bouquet.position.set(-11.0, 0, 0);
+            bouquet.userData = { modalId: c.id, baseY: 2.5, phase: Math.random() * Math.PI * 2 };
+            group.add(bouquet);
+
+            clickableObjects.push(bouquet);
+            galaxyGroup.add(group);
+        });
+
+        const ambientBouquets = [];
+        for (let i = 0; i < 70; i++) {
+            const group = new THREE.Group();
+            const radius = 10 + (i * 0.36);
+            const angle = i * 0.36;
+
+            group.position.x = Math.cos(angle) * radius;
+            group.position.z = Math.sin(angle) * radius;
+            group.position.y = (Math.random() - 0.5) * 3.5;
+
+            const textObj = createTextSprite(mensajesFrases[i % mensajesFrases.length]);
+            group.add(textObj);
+
+            const bouquet = createSunflowerBouquetSprite(false);
+            bouquet.position.set(-7.5, 0, 0);
+            bouquet.userData = { phase: Math.random() * Math.PI * 2 };
+            group.add(bouquet);
+            ambientBouquets.push(bouquet);
+
+            galaxyGroup.add(group);
+        }
+
+        scene.add(galaxyGroup);
+
+        // Mariposas
+        function createButterflyWingTexture(hue) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256; canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+
+            ctx.save();
+            ctx.translate(0, 128);
+            const wingGrad = ctx.createRadialGradient(60, 0, 10, 60, 0, 140);
+            wingGrad.addColorStop(0, hue.inner);
+            wingGrad.addColorStop(0.55, hue.mid);
+            wingGrad.addColorStop(1, hue.outer);
+            ctx.fillStyle = wingGrad;
+
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(40, -110, 190, -90, 220, -10);
+            ctx.bezierCurveTo(200, 40, 120, 30, 90, 10);
+            ctx.bezierCurveTo(110, 70, 160, 110, 130, 150);
+            ctx.bezierCurveTo(70, 130, 20, 60, 0, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        const wingPalettes = [
+            { inner: '#fff6c8', mid: '#ffd400', outer: '#e07d00' },
+            { inner: '#fff0e0', mid: '#ffb84d', outer: '#c9600a' }
+        ];
+
+        function createButterflyMesh() {
+            const palette = wingPalettes[Math.floor(Math.random() * wingPalettes.length)];
+            const tex = createButterflyWingTexture(palette);
+
+            const group = new THREE.Group();
+            const wingGeo = new THREE.PlaneGeometry(2.4, 2.4);
+            const wingMat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide, depthWrite: false });
+
+            const rightWingPivot = new THREE.Group();
+            const rightWing = new THREE.Mesh(wingGeo, wingMat);
+            rightWing.position.x = 1.15;
+            rightWingPivot.add(rightWing);
+            group.add(rightWingPivot);
+
+            const leftWingPivot = new THREE.Group();
+            const leftWing = new THREE.Mesh(wingGeo, wingMat);
+            leftWing.position.x = -1.15;
+            leftWing.scale.x = -1;
+            leftWingPivot.add(leftWing);
+            group.add(leftWingPivot);
+
+            return { group, leftWingPivot, rightWingPivot };
+        }
+
+        const butterflies = [];
+        const butterflyGroup = new THREE.Group();
+
+        for (let i = 0; i < 22; i++) {
+            const b = createButterflyMesh();
+            b.group.position.set((Math.random() - 0.5) * 50, (Math.random() - 0.5) * 18 + 4, (Math.random() - 0.5) * 50);
+            butterflies.push({
+                obj: b,
+                center: b.group.position.clone(),
+                radius: 3 + Math.random() * 6,
+                speed: 0.15 + Math.random() * 0.25,
+                phase: Math.random() * Math.PI * 2,
+                bobSpeed: 0.6 + Math.random() * 0.6,
+                flapSpeed: 12 + Math.random() * 6
+            });
+            butterflyGroup.add(b.group);
+        }
+
+        scene.add(butterflyGroup);
+
+        // Estrellas
+        const starGeo = new THREE.BufferGeometry();
+        const starCount = 1800;
+        const starPos = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount * 3; i += 3) {
+            starPos[i] = (Math.random() - 0.5) * 160;
+            starPos[i + 1] = (Math.random() - 0.5) * 160;
+            starPos[i + 2] = (Math.random() - 0.5) * 160;
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+        const starField = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffd700, size: 0.6, transparent: true, opacity: 0.85 }));
+        scene.add(starField);
+
+        let clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsed = clock.getElapsedTime();
+
+            centerGroup.rotation.y += 0.006;
+            galaxyGroup.rotation.y += 0.0022;
+            starField.rotation.y += 0.0004;
+
+            ambientBouquets.forEach(b => {
+                b.position.y = Math.sin(elapsed * 0.8 + b.userData.phase) * 0.4;
+            });
+
+            clickableObjects.forEach(b => {
+                b.position.y = Math.sin(elapsed * 1.5 + b.userData.phase) * 0.8;
+                const pulse = 1 + Math.sin(elapsed * 2.2 + b.userData.phase) * 0.08;
+                b.scale.set(7.8 * pulse, 7.8 * pulse, 1);
+            });
+
+            butterflies.forEach(b => {
+                const t = elapsed * b.speed + b.phase;
+                b.obj.group.position.x = b.center.x + Math.cos(t) * b.radius;
+                b.obj.group.position.z = b.center.z + Math.sin(t * 1.3) * b.radius * 0.7;
+                b.obj.group.position.y = b.center.y + Math.sin(elapsed * b.bobSpeed + b.phase) * 1.6;
+
+                const flap = Math.sin(elapsed * b.flapSpeed + b.phase) * 1.1;
+                b.obj.leftWingPivot.rotation.y = flap;
+                b.obj.rightWingPivot.rotation.y = -flap;
+            });
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        function handlePick(clientX, clientY) {
+            mouse.x = (clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(clickableObjects);
+            if (intersects.length > 0) {
+                const modalId = intersects[0].object.userData.modalId;
+                if (modalId) openModal(modalId);
+            }
+        }
+
+        window.addEventListener('click', (e) => handlePick(e.clientX, e.clientY));
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        const music = document.getElementById('bgMusic');
+        let musicPlaying = false;
+
+        function toggleMusic() {
+            const btn = document.querySelector('.music-btn');
+            if (musicPlaying) {
+                music.pause();
+                btn.innerText = "🎵 Música: OFF";
+            } else {
+                music.play().catch(() => {});
+                btn.innerText = "🎵 Música: ON";
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        function iniciarExperiencia() {
+            document.getElementById('introScreen').classList.add('hidden');
+            music.play().then(() => { musicPlaying = true; }).catch(() => {});
+        }
+
+        function openModal(id) { document.getElementById(`modal${id}`).classList.add('active'); }
+        function closeModal(id) { document.getElementById(`modal${id}`).classList.remove('active'); }
+    </script>
+</body>
+</html>
